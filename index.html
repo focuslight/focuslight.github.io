@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
-    <title>GrowthForecast - Lightning fast Graphing / Visualization</title>
+    <title>Focuslight - Lightning fast Graphing / Visualization</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Le styles -->
@@ -32,7 +32,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">GrowthForecast</a>
+          <a class="navbar-brand" href="#">Focuslight</a>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li class="active"><a href="#top">Home</a></li>
@@ -40,7 +40,7 @@
               <li><a href="#basic">Basic</a></li>
               <li><a href="#api">API</a></li>
               <li><a href="#software">Software</a></li>
-              <li><a href="https://github.com/kazeburo/GrowthForecast/">Source Code</a></li>
+              <li><a href="https://github.com/focuslight/focuslight/">Source Code</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
@@ -61,8 +61,8 @@
 
       <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="jumbotron" style="background-repeat: no-repeat; background-position: 50% 50%;background-image:url(img/background.png)">
-        <h1>GrowthForecast</h1>
-        <p>GrowthForecast is a web tool that let's you graph all sorts of metrics via a WebAPI. Our simple API let's you create and update charts in real time, customize your charts through a Web interface, and create charts that combine multiple metrics.</p>
+        <h1>Focuslight</h1>
+        <p>Focuslight is a web tool that let's you graph all sorts of metrics via a WebAPI. Our simple API let's you create and update charts in real time, customize your charts through a Web interface, and create charts that combine multiple metrics.</p>
       </div>
 
       <section>
@@ -73,7 +73,7 @@
 $ crontab -l
 */5 * * * * curl -F number=`mysql -BN -e 'select count(*) from member' game` http://example.com/api/socialgame/member/register 2>&1 | logger -t post_gf -p local0.info
 </pre>
-<p>By periodically POSTing to GrowthForecast with cron, you can make charts without having to deal with complex settings</p>
+<p>By periodically POSTing to Focuslight with cron, you can make charts without having to deal with complex settings</p>
           </div>
           <div class="col-md-6"><img src="img/sample1.png" class="img-responsive" /></div>
         </div>
@@ -113,33 +113,33 @@ $ sudo apt-get build-dep rrdtool
           </div>
       </div>
 
-      <h3>(2) Installing GrowthForecast</h3>
+      <h3>(2) Installing Focuslight</h3>
 
         <div class="row">
           <div class="col-md-4">
-            <p>We'll use the <a href="https://metacpan.org/release/App-cpanminus">cpanm</a> command to install GrowthForecast together with its module dependencies.</p>
+            <p>We'll use the <a href="https://metacpan.org/release/App-cpanminus">cpanm</a> command to install Focuslight together with its module dependencies.</p>
             <p>We recommend that you use Perl built with <a href="http://perlbrew.pl/">perlbrew</a> (or others) rather than the default Perl that ships with your OS.</p>
             <p></p>
           </div>
           <div class="col-md-8">
 <pre class="prettyprint linenums">
-$ cpanm -n GrowthForecast
+$ cpanm -n Focuslight
 </pre>
-<p>Please check for version information on <a href="https://metacpan.org/release/GrowthForecast">CPAN</a>. Installation will take a bit of time since there are a many module dependencies.</p>
+<p>Please check for version information on <a href="https://metacpan.org/release/Focuslight">CPAN</a>. Installation will take a bit of time since there are a many module dependencies.</p>
           </div>
       </div>
 
-      <h3>(3) Starting GrowthForecast</h3>
+      <h3>(3) Starting Focuslight</h3>
 
         <div class="row">
           <div class="col-md-4">
-            <p>You've now installed GrowthForecast! To start GrowthForecast, please execute "growthforecast.pl".</p>
+            <p>You've now installed Focuslight! To start Focuslight, please execute "focuslight.pl".</p>
             <p>If you run it with the data-dir option (specifying the directory to store the graph data), the web server will start on port 5125. You can verify this in your browser.</p>
           </div>
           <div class="col-md-8">
 <h3>Boot Command</h3>
 <pre class="prettyprint linenums">
-$ growthforecast.pl --data-dir /home/user/growthforecast
+$ focuslight.pl --data-dir /home/user/focuslight
 </pre>
 
 <h3>Other Boot Options</h3>
@@ -194,15 +194,15 @@ $ growthforecast.pl --data-dir /home/user/growthforecast
 <h4>Expamle of GRANT Command</h4>
 <pre class="prettyprint linenums">
 mysql> GRANT  CREATE, ALTER, DELETE, INSERT, UPDATE, SELECT \\
-         ON growthforecast.* TO 'www'\@'localhost' IDENTIFIED BY foobar;
+         ON focuslight.* TO 'www'\@'localhost' IDENTIFIED BY foobar;
 </pre>
 
 <p>Your username and password are set by system environment variables.</p>
 
 <pre class="prettyprint linenums">
-$ MYSQL_USER=www MYSQL_PASSWORD=foobar growthforecast.pl \\
-      --data-dir /home/user/growthforecast \\
-      --with-mysql dbi:mysql:growthforecast;hostname=localhost 
+$ MYSQL_USER=www MYSQL_PASSWORD=foobar focuslight.pl \\
+      --data-dir /home/user/focuslight \\
+      --with-mysql dbi:mysql:focuslight;hostname=localhost 
 </pre>
 
           </div>

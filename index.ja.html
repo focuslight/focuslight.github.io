@@ -2,7 +2,7 @@
 <html lang="ja">
   <head>
     <meta charset="utf-8">
-    <title>GrowthForecast - Lightning fast Graphing / Visualization</title>
+    <title>Focuslight - Lightning fast Graphing / Visualization</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Le styles -->
@@ -32,7 +32,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">GrowthForecast</a>
+          <a class="navbar-brand" href="#">Focuslight</a>
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li class="active"><a href="#top">Home</a></li>
@@ -41,7 +41,7 @@
               <li><a href="#gf_internal">Internal</a></li>
               <li><a href="#api">API</a></li>
               <li><a href="#software">Software</a></li>
-              <li><a href="https://github.com/kazeburo/GrowthForecast/">Source Code</a></li>
+              <li><a href="https://github.com/focuslight/focuslight/">Source Code</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
               <li class="dropdown">
@@ -61,8 +61,8 @@
 
       <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="jumbotron" style="background-repeat: no-repeat; background-position: 50% 50%;background-image:url(img/background.png)">
-        <h1>GrowthForecast</h1>
-        <p>GrowthForecastは様々な値をWebAPI経由でグラフ化できるWebツールです。シンプルなAPIでリアルタイムにグラフを作成、更新でき、Webインターフェイスからグラフの表示をカスタマイズしたり、複数のメトリクスを重ね合わせたグラフを作成できます</p>
+        <h1>Focuslight</h1>
+        <p>Focuslightは様々な値をWebAPI経由でグラフ化できるWebツールです。シンプルなAPIでリアルタイムにグラフを作成、更新でき、Webインターフェイスからグラフの表示をカスタマイズしたり、複数のメトリクスを重ね合わせたグラフを作成できます</p>
       </div>
 
       <section>
@@ -73,7 +73,7 @@
 $ crontab -l
 */5 * * * * curl -F number=`mysql -BN -e 'select count(*) from member' game` http://example.com/api/socialgame/member/register 2>&1 | logger -t post_gf -p local0.info
 </pre>
-<p>cronで定期的にGrowthForecastにPOSTするだけで、設定なしでグラフが作れます</p>
+<p>cronで定期的にFocuslightにPOSTするだけで、設定なしでグラフが作れます</p>
           </div>
           <div class="col-md-6"><img src="img/sample1.png" class="img-responsive" /></div>
         </div>
@@ -113,7 +113,7 @@ $ sudo apt-get build-dep rrdtool
           </div>
       </div>
 
-      <h3>(2) GrowthForecastのインストール</h3>
+      <h3>(2) Focuslightのインストール</h3>
 
         <div class="row">
           <div class="col-md-4">
@@ -123,23 +123,23 @@ $ sudo apt-get build-dep rrdtool
           </div>
           <div class="col-md-8">
 <pre class="prettyprint linenums">
-$ cpanm -n GrowthForecast
+$ cpanm -n Focuslight
 </pre>
-<p>バージョンは<a href="https://metacpan.org/release/GrowthForecast">CPAN</a>にて確認してください。インストールは依存モジュールの数が多いので時間がかかります</p>
+<p>バージョンは<a href="https://metacpan.org/release/Focuslight">CPAN</a>にて確認してください。インストールは依存モジュールの数が多いので時間がかかります</p>
           </div>
       </div>
 
-      <h3>(3) GrowthForecastの起動</h3>
+      <h3>(3) Focuslightの起動</h3>
 
         <div class="row">
           <div class="col-md-4">
-            <p>ここまでの手順でインストールは完了です。GrowthForecast の起動は「growthforecast.pl」を実行します</p>
+            <p>ここまでの手順でインストールは完了です。Focuslight の起動は「focuslight.pl」を実行します</p>
             <p> data-dir オプションにグラフデータを保存するディレクトリを指定して起動すると、port 5125 でWebサーバが起動するので、ブラウザで確認できます</p>
           </div>
           <div class="col-md-8">
 <h3>起動コマンド</h3>
 <pre class="prettyprint linenums">
-$ growthforecast.pl --data-dir /home/user/growthforecast
+$ focuslight.pl --data-dir /home/user/focuslight
 </pre>
 
 <h3>その他の起動オプション</h3>
@@ -194,15 +194,15 @@ $ growthforecast.pl --data-dir /home/user/growthforecast
 <h4>GRANT文の例</h4>
 <pre class="prettyprint linenums">
 mysql> GRANT  CREATE, ALTER, DELETE, INSERT, UPDATE, SELECT \\
-         ON growthforecast.* TO 'www'\@'localhost' IDENTIFIED BY foobar;
+         ON focuslight.* TO 'www'\@'localhost' IDENTIFIED BY foobar;
 </pre>
 
 <p>ユーザ名とパスワードは環境変数で指定します</p>
 
 <pre class="prettyprint linenums">
-$ MYSQL_USER=www MYSQL_PASSWORD=foobar growthforecast.pl \\
-      --data-dir /home/user/growthforecast \\
-      --with-mysql dbi:mysql:growthforecast;hostname=localhost 
+$ MYSQL_USER=www MYSQL_PASSWORD=foobar focuslight.pl \\
+      --data-dir /home/user/focuslight \\
+      --with-mysql dbi:mysql:focuslight;hostname=localhost 
 </pre>
 
           </div>
@@ -321,8 +321,8 @@ $ curl -F number=10 http://example.com/api/socialgame/member/register
 <h3>GrowthForeacstの仕組み</h3>
 <div class="row">
   <div class="col-md-4">
-  <p>GrowthForecastはRound Robbin Databaseおよびグラフ描画のツールとしてRRDtoolを利用しています。</p>
-  <p>APIのエンドポイントに送信されたデータはRDMBSに一旦保存されます。Workerが定期的に動作し、RDBMSからデータを読み出し、RRDファイルを更新しています。その歳、GrowthForecastのworkerは、現在の値に加えて、一つ前との差分をsubtractデータとして格納しています。</p>
+  <p>FocuslightはRound Robbin Databaseおよびグラフ描画のツールとしてRRDtoolを利用しています。</p>
+  <p>APIのエンドポイントに送信されたデータはRDMBSに一旦保存されます。Workerが定期的に動作し、RDBMSからデータを読み出し、RRDファイルを更新しています。その歳、Focuslightのworkerは、現在の値に加えて、一つ前との差分をsubtractデータとして格納しています。</p>
   <p>subtractデータをグラフのソースとして利用することで、データの変化量を可視化することができます</p>
   </div>
   <div class="col-md-8" style="text-align:center"><img src="img/gf_internal.png" class="img-responsive" /></div>
