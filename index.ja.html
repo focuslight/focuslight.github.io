@@ -71,7 +71,7 @@
 <h3>MySQLのデータを1行のコードでグラフ化できます</h3>
 <pre class="prettyprint linenums">
 $ crontab -l
-*/5 * * * * curl -F number=`mysql -BN -e 'select count(*) from member' game` http://example.com/api/socialgame/member/register 2>&1 | logger -t post_gf -p local0.info
+*/5 * * * * curl -d number=`mysql -BN -e 'select count(*) from member' game` http://example.com/api/socialgame/member/register 2>&1 | logger -t post_gf -p local0.info
 </pre>
 <p>cronで定期的にFocuslightにPOSTするだけで、設定なしでグラフが作れます</p>
           </div>
@@ -117,15 +117,19 @@ $ sudo apt-get build-dep rrdtool
 
         <div class="row">
           <div class="col-md-4">
-            <p><a href="https://metacpan.org/release/App-cpanminus">cpanm</a>コマンドを利用して依存モジュールも一緒にインストールします。</p>
-            <p>OSに最初から入っているperlではなく<a href="http://perlbrew.pl/">perlbrew</a>等で構築したperlを使う事をお勧めします</p>
+            <p><a href="http://bundler.io">bundler</a>コマンドを利用して依存モジュールも一緒にインストールします。</p>
+            <p>OSに最初から入っているrubyではなく<a href="https://github.com/sstephenson/rbenv">rbenv</a>等で構築したrubyを使う事をお勧めします</p>
             <p></p>
           </div>
           <div class="col-md-8">
 <pre class="prettyprint linenums">
-$ cpanm -n Focuslight
+$ git clone git@github.com:focuslight/focuslight.git
+$ cd focuslight
+$ gem install bundler
+$ bundle install
+$ bundle exec rake init
 </pre>
-<p>バージョンは<a href="https://metacpan.org/release/Focuslight">CPAN</a>にて確認してください。インストールは依存モジュールの数が多いので時間がかかります</p>
+<p>インストールは依存 gem の数が多いので時間がかかります</p>
           </div>
       </div>
 
@@ -133,45 +137,58 @@ $ cpanm -n Focuslight
 
         <div class="row">
           <div class="col-md-4">
-            <p>ここまでの手順でインストールは完了です。Focuslight の起動は「focuslight.pl」を実行します</p>
-            <p> data-dir オプションにグラフデータを保存するディレクトリを指定して起動すると、port 5125 でWebサーバが起動するので、ブラウザで確認できます</p>
+            <p>ここまでの手順でインストールは完了です。Focuslight の起動は「bundle exec foreman start」を実行します</p>
+            <p>port 5125 でWebサーバが起動するので、ブラウザで確認できます</p>
           </div>
           <div class="col-md-8">
 <h3>起動コマンド</h3>
 <pre class="prettyprint linenums">
-$ focuslight.pl --data-dir /home/user/focuslight
+$ bundle exec foreman start
 </pre>
 
-<h3>その他の起動オプション</h3>
+<h3>設定</h3>
+
+プロジェクトルートの .env ファイルを編集して設定します。
 
 <table class="table">
 <tr>
-<th>オプション名</th>
+<th>変数名</th>
 <th>説明</th>
 </tr>
 <tr>
-<td>port</td><td>バインドするTCPポート。デフォルトは5125</td>
+<td>DATADIR</td><td>グラフデータ(rrdfile)を保存するディレクトリ。デフォルトは ./data</td>
 </tr>
 <tr>
-<td>host</td><td>バインドするIPアドレス。デフォルトは0.0.0.0</td>
+<td>PORT</td><td>バインドするTCPポート。デフォルトは5125</td>
 </tr>
 <tr>
-<td>front-proxy</td><td>リバースプロキシーを利用している場合、リバースプロキシーのIPアドレスもしくはCIDRで指定する。複数指定可</td>
+<td>HOST</td><td>バインドするIPアドレス。デフォルトは0.0.0.0</td>
 </tr>
 <tr>
-<td>allow-from</td><td>アクセス元IPアドレスの指定。指定しないと全てのリモートホストからアクセス可能</td>
+<td>FRONT_PROXY (未対応)</td><td>リバースプロキシーを利用している場合、リバースプロキシーのIPアドレスもしくはCIDRで指定する。複数指定可</td>
 </tr>
 <tr>
-<td>disable-1min-metrics</td><td>1分毎にグラフを更新する機能の停止</td>
+<td>ALLOW_FROM (未対応 )</td><td>アクセス元IPアドレスの指定。指定しないと全てのリモートホストからアクセス可能</td>
 </tr>
 <tr>
-<td>with-mysql</td><td>グラフ情報を保存するDBに標準のSQLiteではなくMySQLを使う。dbi:mysql:[dbname];hostname=[hostname] の形式で指定</td>
+<td>1MIN_METRICS</td><td>1分毎にグラフを更新する機能の停止</td>
 </tr>
 <tr>
-<td>h または help</td><td>ヘルプの出力</td>
+<td>FLOAT_SUPPORT</td><td>浮動小数点数を受け付ける。デフォルトは整数のみ</td>
+</tr>
+<tr>
+<td>DBURL</td><td>データベースURL。SQLite の場合は sqlite://data/gforecast.db、MySQL の場合は mysql2://root:@localhost/focuslight のように指定する。デフォルトは sqlite://data/gforecast.db</td>
+</tr>
+<tr>
+<td>RRDCACHED (未対応)</td><td>rrdcached アドレス。unix:&lt;/path/to/unix.sock&gt; または &lt;hostname-or-ip&gt;:&lt;port&gt; のように指定する。デフォルトは no</td>
+</tr>
+<tr>
+<td>MOUNT (未対応)</td><td>Focuslight のアドレス path。デフォルトはルート(/)</td>
+</tr>
+<tr>
+<td>LOG_LEVEL</td><td>ログレベル。debug, info, warn, error, fatal のいずれかを指定する。デフォルトは info</td>
 </tr>
 </table>
-
 </div>
 </div>
 
@@ -179,7 +196,7 @@ $ focuslight.pl --data-dir /home/user/focuslight
 
 <div class="row">
 <div class="col-md-4">
-<p>--with-mysql オプションを指定しMySQLを使う場合次の権限が必要となります。</p>
+<p>MySQLを使う場合、データベースを作成し、次の権限を与える必要がなります。</p>
 
 <ul>
 <li>CREATE</li>
@@ -191,18 +208,17 @@ $ focuslight.pl --data-dir /home/user/focuslight
 </ul>
 </div>
 <div class="col-md-8">
-<h4>GRANT文の例</h4>
+<h4>例</h4>
 <pre class="prettyprint linenums">
+mysql> CREATE DATABASE focuslight;
 mysql> GRANT  CREATE, ALTER, DELETE, INSERT, UPDATE, SELECT \\
-         ON focuslight.* TO 'www'\@'localhost' IDENTIFIED BY foobar;
+         ON focuslight.* TO 'user'\@'localhost' IDENTIFIED BY password;
 </pre>
 
-<p>ユーザ名とパスワードは環境変数で指定します</p>
+<p>ユーザ名とパスワードは DBURL 変数で指定します</p>
 
 <pre class="prettyprint linenums">
-$ MYSQL_USER=www MYSQL_PASSWORD=foobar focuslight.pl \\
-      --data-dir /home/user/focuslight \\
-      --with-mysql dbi:mysql:focuslight;hostname=localhost 
+DBURL=mysql2://user:password@localhost/focuslight
 </pre>
 
           </div>
@@ -296,24 +312,15 @@ gauge: number の数値で常に上書き<br />
 
 <h3>グラフ登録サンプル</h3>
 
-<p>PerlのLWPモジュールを利用したグラフの登録・更新サンプル</p>
-
-<pre class="prettyprint linenums">
-my $ua = LWP::UserAgent->new;
-$ua->post('http://example.com/api/socialgame/member/register',{
-    number      => 10,
-    color       => '#333399'
-});
-</pre>
-
 <p>curlを使った場合</p>
 
 <pre class="prettyprint linenums">
-$ curl -F number=10 http://example.com/api/socialgame/member/register
+$ curl -d number=10 http://example.com/api/socialgame/member/register
 </pre>
 
       </section>
 
+<!--
       <section id="gf_internal">
         <div class="page-header">
           <h1>Internal <small>内部動作</small></h1>
@@ -328,6 +335,7 @@ $ curl -F number=10 http://example.com/api/socialgame/member/register
   <div class="col-md-8" style="text-align:center"><img src="img/gf_internal.png" class="img-responsive" /></div>
 <div>
       </section>
+-->
 
       <section id="api">
         <div class="page-header">
@@ -354,7 +362,7 @@ $ curl -F number=10 http://example.com/api/socialgame/member/register
 <p><img src="img/sample.png" class="img-responsive" /></p>
 
 <pre class="prettyprint">
-http://example.com/graph/service/section/graph?t=d&gmode=gauge&border=0&legend=0&width=200&background_color=333333&canvas_color=333333&font_color=CCCCCC&axis_color=666666
+http://example.com/graph/service/section/graph?t=d&border=0&legend=0&width=200&background_color=333333&canvas_color=333333&font_color=CCCCCC&axis_color=666666
 </pre>
 
 </div>
@@ -375,10 +383,6 @@ http://example.com/graph/service/section/graph?t=d&gmode=gauge&border=0&legend=0
 <tr>
 <td>to</td>
 <td>「t」が「c」または「sc」の場合、描画する終了日付。「2011/12/08 12:10:00」の形式で指定</td>
-</tr>
-<tr>
-<td>gmode</td>
-<td>値そのままの普通グラフ「gauge」か差分グラフ「subtract」の選択。デフォルトは「gauge」</td>
 </tr>
 <tr>
 <td>width</td>
@@ -511,11 +515,6 @@ http://example.com/graph/service/section/graph?t=d&gmode=gauge&border=0&legend=0
 <td>「t」が「c」または「sc」の場合、描画する終了日付。「2011/12/08 12:10:00」の形式で指定</td>
 </tr>
 <tr>
-<td>gmode</td>
-<td>値をそのまま描画する普通グラフか差分グラフの選択、「gauge」または「subtract」。デフォルトは「gauge」</td>
-<td>値そのままの普通グラフ「gauge」か差分グラフ「subtract」の選択。デフォルトは「gauge」</td>
-</tr>
-<tr>
 <td>width</td>
 <td>rowの最大個数</td>
 </tr>
@@ -532,6 +531,8 @@ http://example.com/graph/service/section/graph?t=d&gmode=gauge&border=0&legend=0
         </div>
 <div class="row">
 <div class="col-md-12">
+<p>Focuslight は GrowthForecast と HTTP API 互換を持つ Ruby ポートであるため、以下の GrowthForecast 用クライアントソフトウェアを利用するこができます</p>
+
 <h4>fluent-plugin-growthforecast</h4>
 <p><a href="https://github.com/tagomoris/fluent-plugin-growthforecast">https://github.com/tagomoris/fluent-plugin-growthforecast</a><br />
 Fluentd plugin to output numbers(metrics) to 'GrowthForecast', metrics drawing tool over HTTP.</p>
